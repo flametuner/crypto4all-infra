@@ -1,0 +1,5 @@
+.envrc
+.terraform
+.terragrunt-cache
+*.tfvars
+.terraform.lock.hcl
