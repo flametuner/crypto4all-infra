@@ -13,7 +13,7 @@ inputs = {
     memory = "500M"
   }
   health_check = {
-    path = "/graphql\\?query\\=%7BhealthCheck%7D"
+    path = "/graphql?query=%7BhealthCheck%7D"
     port = 3000
   }
 }
