@@ -32,7 +32,8 @@ resource "google_container_node_pool" "node_pool" {
   node_config {
     preemptible  = each.value.preemptible
     machine_type = each.value.machine_type
-    disk_type    = "pd-ssd"
+    disk_size_gb = var.disk_size_gb
+    disk_type    = var.disk_type
     workload_metadata_config {
       mode = "GKE_METADATA"
     }

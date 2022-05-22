@@ -18,3 +18,13 @@ variable "node_pool" {
   }))
 
 }
+
+variable "disk_size_gb" {
+  type    = number
+  default = 100
+}
+
+variable "disk_type" {
+  type    = string
+  default = "pd-standard"
+}

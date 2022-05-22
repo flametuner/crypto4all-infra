@@ -8,5 +8,6 @@ locals {
 }
 
 inputs = {
-  name = local.root_config.inputs.app_name
+  name         = local.root_config.inputs.app_name
+  disk_size_gb = 10
 }
