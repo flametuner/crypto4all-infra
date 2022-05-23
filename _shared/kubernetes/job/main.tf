@@ -47,19 +47,6 @@ resource "kubernetes_job" "this" {
           }
         }
 
-        dynamic "container" {
-          for_each = length(var.cloudsql_sidecar_instance) > 0 ? [var.cloudsql_sidecar_instance] : []
-
-          content {
-            image   = "gcr.io/cloudsql-docker/gce-proxy:1.30.1"
-            name    = "cloudsql-proxy"
-            command = ["/cloud_sql_proxy", "-log_debug_stdout", "-instances=${container.value}=tcp:5432"]
-            security_context {
-              run_as_non_root = true
-            }
-          }
-        }
-
         container {
           name              = "${var.name}-${local.IMAGE_TAG}"
           image             = "${var.image}:${local.IMAGE_TAG}"

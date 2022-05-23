@@ -14,11 +14,6 @@ variable "state_backend" {
   type = string
 }
 
-variable "cloudsql_sidecar_instance" {
-  type    = string
-  default = ""
-}
-
 variable "name" {
   type = string
 }
@@ -32,6 +27,12 @@ variable "image" {
 }
 
 variable "args" {
+  type    = list(string)
+  default = []
+}
+
+variable "command" {
+  type    = list(string)
   default = []
 }
 

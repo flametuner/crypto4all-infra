@@ -28,11 +28,6 @@ variable "state_backend" {
   type = string
 }
 
-variable "cloudsql_sidecar_instance" {
-  type    = string
-  default = ""
-}
-
 variable "namespace" {
   default = "default"
 }
