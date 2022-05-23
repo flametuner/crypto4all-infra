@@ -1,12 +1,11 @@
-variable "state_prefix" {
-  type = string
-}
-
 variable "IMAGE_TAG" {
   description = "The image tag to use for the container"
   default     = ""
 }
 
+variable "state_prefix" {
+  type = string
+}
 variable "state_bucket" {
   type = string
 }
