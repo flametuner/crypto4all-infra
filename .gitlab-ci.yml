@@ -23,8 +23,6 @@ stages:
       - "*/**/.terragrunt-cache"
   before_script:
     - cd $TF_ROOT/$TG_ENVIRONMENT/$TG_MODULE
-    - base64 -d $GOOGLE_SERVICE_ACCOUNT > $CI_PROJECT_DIR/google-service-account.json
-    - export GOOGLE_APPLICATION_CREDENTIALS=$CI_PROJECT_DIR/google-service-account.json
     - terraform --version
     - terragrunt --version
     - export TFVARS=$(eval echo \$tfvars_${LOCATION}_$TF_WORKSPACE)
