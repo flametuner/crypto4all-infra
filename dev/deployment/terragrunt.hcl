@@ -20,6 +20,10 @@ dependency "cloudsql" {
   config_path = "../cloudsql"
 }
 
+dependency "database" {
+  config_path = "../database"
+}
+
 dependency "namespace" {
   config_path = "../namespace"
 }
@@ -61,7 +65,7 @@ inputs = {
     TWITTER_CONSUMER_SECRET = "***REMOVED***"
     TWITTER_BEARER_TOKEN    = "***REMOVED***"
 
-    DATABASE_URL = "postgresql://postgres:postgres@localhost:5432/dev?schema=prisma"
+    DATABASE_URL = "postgresql://${dependency.database.outputs.username}:${dependency.database.outputs.password}@localhost:5432/${dependency.database.outputs.db_name}?schema=prisma"
     JWT_SECRET   = "***REMOVED***"
     SALT_ROUNDS  = 3
   }
