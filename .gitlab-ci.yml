@@ -23,13 +23,10 @@ stages:
       - "*/**/.terragrunt-cache"
   before_script:
     - cd $TF_ROOT/$TG_ENVIRONMENT/$TG_MODULE
-    - pwd
-    - echo $GOOGLE_APPLICATION_CREDENTIALS
     - terraform --version
     - terragrunt --version
     - export TFVARS=$(eval echo \$tfvars_${LOCATION}_$TF_WORKSPACE)
     - test $TFVARS && test -f $TFVARS && mv $TFVARS terraform.tfvars
-    - terragrunt init
 
 .plan:
   extends: .terragrunt_default
