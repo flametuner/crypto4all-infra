@@ -69,4 +69,8 @@ inputs = {
     SALT_ROUNDS  = 3
     PORT         = 3000
   }
+  requests = {
+    cpu    = "10m"
+    memory = "80Mi"
+  }
 }
