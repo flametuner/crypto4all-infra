@@ -16,12 +16,12 @@ include "deployment" {
   path = "${dirname(find_in_parent_folders())}/_config/deployment.hcl"
 }
 
-dependency "cloudsql" {
-  config_path = "../cloudsql"
-}
-
 dependency "database" {
   config_path = "../database"
+}
+
+dependency "cloudproxy" {
+  config_path = "../cloudproxy"
 }
 
 dependency "namespace" {
@@ -41,12 +41,11 @@ dependency "service_account" {
 }
 
 inputs = {
-  name                      = "backend"
-  namespace                 = dependency.namespace.outputs.name
-  image                     = "${dependency.repository.outputs.repository_name}/backend"
-  domain_name               = dependency.domain_record.outputs.domain_name
-  cloudsql_sidecar_instance = "${include.root.locals.google_project}:${include.root.locals.google_location}:${dependency.cloudsql.outputs.instance_name}"
-  service_account_name      = dependency.service_account.outputs.name
+  name                 = "backend"
+  namespace            = dependency.namespace.outputs.name
+  image                = "${dependency.repository.outputs.repository_name}/backend"
+  domain_name          = dependency.domain_record.outputs.domain_name
+  service_account_name = dependency.service_account.outputs.name
   environment_vars = {
     API_URL_RINKEBY = "***REMOVED***"
     API_URL_MUMBAI  = "https://polygon-mumbai.infura.io/v3/***REMOVED***"
@@ -65,8 +64,9 @@ inputs = {
     TWITTER_CONSUMER_SECRET = "***REMOVED***"
     TWITTER_BEARER_TOKEN    = "***REMOVED***"
 
-    DATABASE_URL = "postgresql://${dependency.database.outputs.username}:${dependency.database.outputs.password}@localhost:5432/${dependency.database.outputs.db_name}?schema=prisma"
+    DATABASE_URL = "postgresql://${dependency.database.outputs.username}:${dependency.database.outputs.password}@${dependency.cloudproxy.outputs.name}:5432/${dependency.database.outputs.db_name}?schema=prisma"
     JWT_SECRET   = "***REMOVED***"
     SALT_ROUNDS  = 3
+    PORT         = 3000
   }
 }
