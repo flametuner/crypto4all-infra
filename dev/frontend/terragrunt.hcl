@@ -33,4 +33,8 @@ inputs = {
   namespace   = dependency.namespace.outputs.name
   image       = "${dependency.repository.outputs.repository_name}/frontend"
   domain_name = dependency.domain_record.outputs.domain_name
+  health_check = {
+    path = "/"
+    port = 3000
+  }
 }
