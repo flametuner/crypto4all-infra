@@ -31,6 +31,6 @@ dependency "domain_record" {
 inputs = {
   name        = "frontend"
   namespace   = dependency.namespace.outputs.name
-  image       = "${dependency.repository.outputs.repository_name}/frontend:latest"
+  image       = "${dependency.repository.outputs.repository_name}/frontend"
   domain_name = dependency.domain_record.outputs.domain_name
 }

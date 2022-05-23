@@ -1,3 +1,19 @@
+variable "state_prefix" {
+  type = string
+}
+
+variable "IMAGE_TAG" {
+  description = "The image tag to use for the container"
+  default     = ""
+}
+
+variable "state_bucket" {
+  type = string
+}
+
+variable "state_backend" {
+  type = string
+}
 
 variable "cloudsql_sidecar_instance" {
   type    = string

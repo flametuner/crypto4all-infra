@@ -1,6 +1,29 @@
-locals {
-  env_keys = nonsensitive(keys(var.environment_vars))
+terraform {
+  # Live modules pin exact provider version; generic modules let consumers pin the version.
+  required_providers {
+    google = {
+      source  = "hashicorp/google"
+      version = "~> 4.0"
+    }
+    kubernetes = {
+      source  = "hashicorp/kubernetes"
+      version = "~> 2.0"
+    }
+  }
 }
+locals {
+  env_keys  = nonsensitive(keys(var.environment_vars))
+  IMAGE_TAG = var.IMAGE_TAG != "" ? var.IMAGE_TAG : try(data.terraform_remote_state.this.outputs.IMAGE_TAG, "latest")
+}
+
+data "terraform_remote_state" "this" {
+  backend = var.state_backend
+  config = {
+    bucket = var.state_bucket
+    prefix = var.state_prefix
+  }
+}
+
 
 resource "kubernetes_deployment" "deployment" {
   metadata {
@@ -64,7 +87,7 @@ resource "kubernetes_deployment" "deployment" {
         }
 
         container {
-          image = var.image
+          image = "${var.image}:${local.IMAGE_TAG}"
           name  = var.name
           args  = var.args
 

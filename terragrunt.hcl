@@ -3,16 +3,18 @@ locals {
   current_prefix  = path_relative_to_include()
   google_project  = "crypto-for-all"
   google_location = "us-central1"
+  state_backend   = "gcs"
+  state_bucket    = "cryptoforall-terraform"
 }
 
 remote_state {
-  backend = "gcs"
+  backend = local.state_backend
   generate = {
     path      = "remote_state.tf"
     if_exists = "overwrite"
   }
   config = {
-    bucket   = "cryptoforall-terraform"
+    bucket   = local.state_bucket
     prefix   = local.current_prefix
     location = local.google_location
     project  = local.google_project
@@ -40,4 +42,9 @@ inputs = {
   location    = local.google_location
   domain_name = "crypto4all.app."
   zone_name   = "crypto4all-app"
+
+
+  state_backend = local.state_backend
+  state_bucket  = local.state_bucket
+  state_prefix  = local.current_prefix
 }

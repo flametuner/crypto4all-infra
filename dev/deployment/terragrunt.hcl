@@ -39,7 +39,7 @@ dependency "service_account" {
 inputs = {
   name                      = "backend"
   namespace                 = dependency.namespace.outputs.name
-  image                     = "${dependency.repository.outputs.repository_name}/backend:latest"
+  image                     = "${dependency.repository.outputs.repository_name}/backend"
   domain_name               = dependency.domain_record.outputs.domain_name
   cloudsql_sidecar_instance = "${include.root.locals.google_project}:${include.root.locals.google_location}:${dependency.cloudsql.outputs.instance_name}"
   service_account_name      = dependency.service_account.outputs.name
