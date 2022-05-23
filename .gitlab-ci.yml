@@ -62,3 +62,12 @@ frontend:deployment:
   rules:
     - !reference [.apply, rules]
     - if: '$TRIGGER_JOB == $CI_JOB_NAME && $CI_PIPELINE_SOURCE == "pipeline"'
+
+backend:deployment:
+  stage: deploy
+  extends: .apply
+  variables:
+    TG_MODULE: deployment
+  rules:
+    - !reference [.apply, rules]
+    - if: '$TRIGGER_JOB == $CI_JOB_NAME && $CI_PIPELINE_SOURCE == "pipeline"'
