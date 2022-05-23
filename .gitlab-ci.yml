@@ -23,6 +23,7 @@ stages:
       - "*/**/.terragrunt-cache"
   before_script:
     - cd $TF_ROOT/$TG_ENVIRONMENT/$TG_MODULE
+    - pwd
     - terraform --version
     - terragrunt --version
     - export TFVARS=$(eval echo \$tfvars_${LOCATION}_$TF_WORKSPACE)
