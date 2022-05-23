@@ -2,8 +2,8 @@ default:
   image:
     name: registry.gitlab.com/graph-node/images/deployer:latest
     entrypoint:
-      - '/usr/bin/env'
-      - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+      - "/usr/bin/env"
+      - "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
 stages:
   - validate
@@ -24,6 +24,7 @@ stages:
   before_script:
     - cd $TF_ROOT/$TG_ENVIRONMENT/$TG_MODULE
     - pwd
+    - echo $GOOGLE_APPLICATION_CREDENTIALS
     - terraform --version
     - terragrunt --version
     - export TFVARS=$(eval echo \$tfvars_${LOCATION}_$TF_WORKSPACE)
