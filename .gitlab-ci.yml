@@ -1,0 +1,65 @@
+default:
+  image:
+    name: registry.gitlab.com/graph-node/images/deployer:latest
+    entrypoint:
+      - '/usr/bin/env'
+      - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+
+stages:
+  - validate
+  - build
+  - deploy
+
+.terragrunt_default:
+  variables:
+    PLAN: plan.tfplan
+    JSON_PLAN_FILE: tfplan.json
+    TF_ROOT: .
+    TG_ENVIRONMENT: dev
+    TF_WORKSPACE: default
+  cache:
+    key: ${TF_ROOT}-${TG_ENVIRONMENT}-${CI_JOB_NAME}
+    paths:
+      - "*/**/.terragrunt-cache"
+  before_script:
+    - cd $TF_ROOT/$TG_ENVIRONMENT/$TG_MODULE
+    - base64 -d $GOOGLE_SERVICE_ACCOUNT > $CI_PROJECT_DIR/google-service-account.json
+    - export GOOGLE_APPLICATION_CREDENTIALS=$CI_PROJECT_DIR/google-service-account.json
+    - terraform --version
+    - terragrunt --version
+    - export TFVARS=$(eval echo \$tfvars_${LOCATION}_$TF_WORKSPACE)
+    - test $TFVARS && test -f $TFVARS && mv $TFVARS terraform.tfvars
+
+.plan:
+  extends: .terragrunt_default
+  stage: build
+  script:
+    - terragrunt $(if [ $TG_RUN_ALL ]; then echo "run-all"; fi) plan -out=$PLAN
+  artifacts:
+    paths:
+      - "*/$PLAN"
+  rules:
+    - if: '$CI_PIPELINE_SOURCE != "pipeline" && $PARENT_PIPELINE_SOURCE != "pipeline"'
+
+.apply:
+  extends: .terragrunt_default
+  stage: deploy
+  script:
+    - CONTAINS_PLAN=$(find . -name $PLAN)
+    - echo "terragrunt $(if [ $TG_RUN_ALL ]; then echo "run-all"; fi) apply -input=false $(if [ $CONTAINS_PLAN ]; then echo $PLAN; else echo "--auto-approve"; fi)"
+    - terragrunt $(if [ $TG_RUN_ALL ]; then echo "run-all"; fi) apply -input=false $(if [ $CONTAINS_PLAN ]; then echo $PLAN; else echo "--auto-approve"; fi)
+  rules:
+    - if: '$CI_COMMIT_REF_PROTECTED != "true"'
+      when: never
+    - if: '$CI_PIPELINE_SOURCE != "pipeline" && $PARENT_PIPELINE_SOURCE != "pipeline"'
+      when: manual
+      allow_failure: true
+
+frontend:deployment:
+  stage: deploy
+  extends: .apply
+  variables:
+    TG_MODULE: frontend
+  rules:
+    - !reference [.apply, rules]
+    - if: '$TRIGGER_JOB == $CI_JOB_NAME && $CI_PIPELINE_SOURCE == "pipeline"'
