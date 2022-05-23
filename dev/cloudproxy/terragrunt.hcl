@@ -33,7 +33,7 @@ inputs = {
   namespace            = dependency.namespace.outputs.name
   image                = "gcr.io/cloudsql-docker/gce-proxy"
   IMAGE_TAG            = "1.30.1"
-  command              = ["/cloud_sql_proxy", "-log_debug_stdout", "-instances=${include.root.locals.google_project}:${include.root.locals.google_location}:${dependency.cloudsql.outputs.instance_name}=tcp:5432"]
+  command              = ["/cloud_sql_proxy", "-log_debug_stdout", "-instances=${include.root.locals.google_project}:${include.root.locals.google_location}:${dependency.cloudsql.outputs.instance_name}=tcp:0.0.0.0:5432"]
   service_account_name = dependency.service_account.outputs.name
   create_ingress       = false
   create_service       = true
