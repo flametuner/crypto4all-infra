@@ -48,10 +48,10 @@ inputs = {
   service_account_name = dependency.service_account.outputs.name
   environment_vars = {
     BNB_TESTNET_RPC      = "https://data-seed-prebsc-1-s3.binance.org:8545/"
-    TWITTER_BEARER_TOKEN = "***REMOVED***"
-    PRIVATE_KEY          = "***REMOVED***"
+    TWITTER_BEARER_TOKEN = "[REMOVED]"
+    PRIVATE_KEY          = "[REMOVED]"
     DATABASE_URL         = "postgresql://${dependency.database.outputs.username}:${dependency.database.outputs.password}@${dependency.cloudproxy.outputs.name}:5432/${dependency.database.outputs.db_name}?schema=prisma"
-    JWT_SECRET           = "***REMOVED***"
+    JWT_SECRET           = "[REMOVED]"
     PORT                 = 3000
   }
   requests = {
